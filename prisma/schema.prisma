@@ -1,0 +1,171 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  admin
+  member
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  role          Role      @default(member)
+  is_active     Boolean   @default(true)
+  created_at    DateTime  @default(now())
+  last_login_at DateTime?
+
+  proposals     Proposal[]
+  votes         Vote[]
+  tastingScores TastingScore[]
+  threads       Thread[]
+  posts         Post[]
+  achievements  UserAchievement[]
+}
+
+model Bottle {
+  id             String    @id @default(cuid())
+  name           String
+  producer       String?
+  vintage        String?
+  type           String?
+  stock          Int       @default(0)
+  purchase_price Float?
+  market_value   Float?
+  purchase_date  DateTime?
+  is_tasted      Boolean   @default(false)
+  image_url      String?
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  proposals Proposal[]
+  tastings  Tasting[]
+}
+
+enum MeetingStatus {
+  planning
+  voting
+  scheduled
+  completed
+}
+
+model Meeting {
+  id         String        @id @default(cuid())
+  title      String?
+  date       DateTime?
+  location   String?
+  status     MeetingStatus @default(planning)
+  created_at DateTime      @default(now())
+  updated_at DateTime      @updatedAt
+
+  proposals Proposal[]
+  tastings  Tasting[]
+}
+
+model Proposal {
+  id         String   @id @default(cuid())
+  user_id    String
+  meeting_id String
+  bottle_id  String
+  created_at DateTime @default(now())
+
+  user    User    @relation(fields: [user_id], references: [id])
+  meeting Meeting @relation(fields: [meeting_id], references: [id])
+  bottle  Bottle  @relation(fields: [bottle_id], references: [id])
+  votes   Vote[]
+
+  @@unique([meeting_id, bottle_id])
+}
+
+model Vote {
+  id          String   @id @default(cuid())
+  user_id     String
+  proposal_id String
+  created_at  DateTime @default(now())
+
+  user     User     @relation(fields: [user_id], references: [id])
+  proposal Proposal @relation(fields: [proposal_id], references: [id])
+
+  @@unique([user_id, proposal_id])
+}
+
+model Tasting {
+  id            String   @id @default(cuid())
+  meeting_id    String
+  bottle_id     String
+  verdict       String?
+  average_score Float?
+  created_at    DateTime @default(now())
+
+  meeting Meeting        @relation(fields: [meeting_id], references: [id])
+  bottle  Bottle         @relation(fields: [bottle_id], references: [id])
+  scores  TastingScore[]
+
+  @@unique([meeting_id, bottle_id])
+}
+
+model TastingScore {
+  id         String   @id @default(cuid())
+  tasting_id String
+  user_id    String
+  score      Float
+  notes      String?
+  created_at DateTime @default(now())
+
+  tasting Tasting @relation(fields: [tasting_id], references: [id])
+  user    User    @relation(fields: [user_id], references: [id])
+
+  @@unique([tasting_id, user_id])
+}
+
+model Thread {
+  id         String   @id @default(cuid())
+  title      String
+  author_id  String
+  meeting_id String?
+  bottle_id  String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  author User   @relation(fields: [author_id], references: [id])
+  posts  Post[]
+}
+
+model Post {
+  id         String   @id @default(cuid())
+  thread_id  String
+  author_id  String
+  content    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  thread Thread @relation(fields: [thread_id], references: [id])
+  author User   @relation(fields: [author_id], references: [id])
+}
+
+model Achievement {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  description String
+  icon        String?
+
+  users UserAchievement[]
+}
+
+model UserAchievement {
+  id             String   @id @default(cuid())
+  user_id        String
+  achievement_id String
+  unlocked_at    DateTime @default(now())
+
+  user        User        @relation(fields: [user_id], references: [id])
+  achievement Achievement @relation(fields: [achievement_id], references: [id])
+
+  @@unique([user_id, achievement_id])
+}

@@ -1,25 +1,39 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Color Tokens */
+  --bg: #0E0E0F;
+  --card: #161617;
+  --secondary: #1F1F21;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Wine Accents */
+  --wine-burgundy: #4B0F1C;
+  --wine-deep: #6A1B2A;
+
+  /* Lights */
+  --accent-gold: #C9A45C;
+  --accent-amber: #E2B76F;
+
+  /* Text */
+  --text-primary: #F2F2F2;
+  --text-secondary: #B8B8B8;
+  --text-muted: #7A7A7A;
+
+  /* Layout & Effects */
+  --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --glow-gold: 0 0 12px rgba(201, 164, 92, 0.4);
+  --transition-slow: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-normal: all 0.2s ease-in-out;
 }
 
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  /* Typography mostly handled by Next.js fonts in layout.tsx */
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -33,10 +47,85 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+  transition: var(--transition-normal);
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+a:hover {
+  color: var(--accent-gold);
+}
+
+/* Base Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-primary);
+  font-family: var(--font-playfair), serif;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+/* Card layout constraints */
+.card {
+  background-color: var(--card);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-soft);
+  transition: var(--transition-slow);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.card:hover {
+  box-shadow: var(--glow-gold);
+  border-color: rgba(201, 164, 92, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Buttons */
+.btn {
+  background-color: var(--secondary);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.btn:hover {
+  background-color: var(--card);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.btn-primary {
+  background-color: var(--wine-burgundy);
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--wine-deep);
+  color: var(--text-primary);
+  box-shadow: var(--glow-gold);
+}
+
+/* Utilities */
+.text-gold {
+  color: var(--accent-gold);
+}
+
+.text-amber {
+  color: var(--accent-amber);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.bg-deep-wine {
+  background-color: var(--wine-deep);
 }
