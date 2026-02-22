@@ -5,75 +5,75 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
-    const router = useRouter();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsLoading(true);
-        setError("");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
-        try {
-            const res = await signIn("credentials", {
-                redirect: false,
-                email,
-                password,
-            });
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
 
-            if (res?.error) {
-                // Generic error message as per spec
-                setError("Ugyldig email eller adgangskode.");
-            } else {
-                router.push("/dashboard");
-                router.refresh();
-            }
-        } catch (err) {
-            setError("Der opstod en systemfejl.");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+      if (res?.error) {
+        // Generic error message as per spec
+        setError("Ugyldig email eller adgangskode.");
+      } else {
+        router.push("/");
+        router.refresh();
+      }
+    } catch (err) {
+      setError("Der opstod en systemfejl.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    return (
-        <form onSubmit={handleSubmit} className="login-form">
-            {error && <div className="error-message">{error}</div>}
+  return (
+    <form onSubmit={handleSubmit} className="login-form">
+      {error && <div className="error-message">{error}</div>}
 
-            <div className="form-group">
-                <label htmlFor="email" className="form-label">Email</label>
-                <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="form-input"
-                    placeholder="medlem@dvk.dk"
-                    disabled={isLoading}
-                />
-            </div>
+      <div className="form-group">
+        <label htmlFor="email" className="form-label">Email</label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="form-input"
+          placeholder="medlem@dvk.dk"
+          disabled={isLoading}
+        />
+      </div>
 
-            <div className="form-group">
-                <label htmlFor="password" className="form-label">Adgangskode</label>
-                <input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="form-input"
-                    placeholder="••••••••"
-                    disabled={isLoading}
-                />
-            </div>
+      <div className="form-group">
+        <label htmlFor="password" className="form-label">Adgangskode</label>
+        <input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="form-input"
+          placeholder="••••••••"
+          disabled={isLoading}
+        />
+      </div>
 
-            <button type="submit" disabled={isLoading} className="btn btn-primary submit-btn">
-                {isLoading ? "Træder ind..." : "Træd ind i kælderen"}
-            </button>
+      <button type="submit" disabled={isLoading} className="btn btn-primary submit-btn">
+        {isLoading ? "Træder ind..." : "Træd ind i kælderen"}
+      </button>
 
-            <style jsx>{`
+      <style jsx>{`
         .login-form {
           display: flex;
           flex-direction: column;
@@ -128,6 +128,6 @@ export default function LoginForm() {
           width: 100%;
         }
       `}</style>
-        </form>
-    );
+    </form>
+  );
 }

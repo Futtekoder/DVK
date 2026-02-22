@@ -4,28 +4,28 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
 export default async function LoginPage() {
-    const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
-    if (session) {
-        redirect("/dashboard");
-    }
+  if (session) {
+    redirect("/");
+  }
 
-    return (
-        <main className="login-container">
-            <div className="manifest-box">
-                <h1 className="manifest-text">
-                    Alt købt skal drikkes<br />
-                    Intet helligt<br />
-                    Kun prop
-                </h1>
-            </div>
+  return (
+    <main className="login-container">
+      <div className="manifest-box">
+        <h1 className="manifest-text">
+          Alt købt skal drikkes<br />
+          Intet helligt<br />
+          Kun prop
+        </h1>
+      </div>
 
-            <div className="login-box">
-                <h2 className="login-title">DVK</h2>
-                <LoginForm />
-            </div>
+      <div className="login-box">
+        <h2 className="login-title">DVK</h2>
+        <LoginForm />
+      </div>
 
-            <style>{`
+      <style>{`
         .login-container {
           min-height: 100vh;
           display: flex;
@@ -70,6 +70,6 @@ export default async function LoginPage() {
           letter-spacing: 0.1em;
         }
       `}</style>
-        </main>
-    );
+    </main>
+  );
 }
